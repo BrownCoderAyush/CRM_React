@@ -1,4 +1,4 @@
-export default function Login() {
+export default function Login(){
     return (
         <div className="flex justify-center h-[100vh] items-center">
             <div className="card bg-primary text-primary-content w-96">
