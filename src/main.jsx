@@ -1,16 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { Provider } from 'react-redux';
-import store from './Redux/store.js';
-import App from './App.jsx'
-
 //css imports
-import './index.css'
+import './index.css';
+
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+
+import App from './App.jsx';
+import store from './Redux/store.js';
 
 // https://www.subframe.com/blog/how-to-make-tailwind-desktop-first
 ReactDOM.createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
   <Provider store={store}>
     <App />
-  </Provider>
 
-)
+  </Provider>
+  </BrowserRouter>
+
+);
