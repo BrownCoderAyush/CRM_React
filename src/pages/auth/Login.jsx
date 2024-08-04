@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { login } from "../../Redux/Slices/AuthSlice";
 
@@ -23,11 +23,19 @@ export default function Login(){
         });
     }
 
+    function resetLoginState(){
+        setLoginDetails({
+            email:"",
+            password:""
+        });
+    }
+
     async function onSubmit(){
-        
+
         if(loginDetails.email=="" || loginDetails.password=="")return;
         const response = await dispatch(login(loginDetails));
         if(response.payload) navigator("/");
+        else resetLoginState();
 
     }
 
@@ -54,8 +62,14 @@ export default function Login(){
                         className="input input-bordered w-full max-w-xs text-white" 
                     />
                     <div className="card-actions flex justify-center basis-2/3">
-                        <button className="btn btn-warning w-full basis-70 hover:bg-red-500" onClick={onSubmit}>SUBMIT</button>
+                        <button className="btn btn-warning w-full basis-70 hover:bg-yellow-300" onClick={onSubmit}>SUBMIT</button>
                     </div>
+                    <p className="text-white text-base font-semibold">
+                        Don't have an account ? <Link 
+                        to="/signup"
+                        className="text-red-600"
+                        >SignUp Instead</Link>
+                    </p>
                 </div>
             </div>
         </div>
