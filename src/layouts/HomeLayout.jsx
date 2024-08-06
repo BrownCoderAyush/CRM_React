@@ -1,10 +1,35 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { BiMenu } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+
+import { logout } from "../Redux/Slices/AuthSlice";
 
 
 function HomeLayout({children}){
 
     const drawer = useRef(null);
+    const auth=useSelector(state=>state.auth);
+    const dispatch = useDispatch();
+    const navigator = useNavigate();
+    
+    useEffect(()=>{
+        console.log(auth.isLoggedIn,"auth");
+    });
+
+    async function onLogout(){
+        dispatch(logout());
+        navigator('/login');
+
+    }
+
+    //don't allow user to get into "/" if not loggedIn
+    useEffect(()=>{
+        if(!auth.isLoggedIn){
+            navigator("/login");
+        }    
+    },[]);
+
     return (
         <div className="min-h-[90vh]">
         <div
@@ -35,8 +60,17 @@ function HomeLayout({children}){
                     <li><a>Dashboard</a></li>
                     <li className="absolute bottom-3 w-full ">
                         <div className="w-full flex gap-8">
-                            <button className="inline btn btn-primary px-4 py-2 ">Login</button>
-                            <button className="inline btn btn-secondary px-4 py-2">Signup</button>
+                            {!auth.isLoggedIn ? (
+                                <>
+                                <button className="inline btn btn-primary px-4 py-2 "><Link to="/login">LogIn</Link></button>
+                                <button className="inline btn btn-secondary px-4 py-2"><Link to="/signup">Signup</Link> </button>
+                                </>
+                            ) : (
+                                <>
+                                <button className="inline btn btn-primary px-4 py-2 ">Profile</button>
+                                <button className="inline btn btn-secondary px-4 py-2" onClick={onLogout}>Logout</button>
+                                </>
+                            )}
                         </div>
                     </li>
                 </ul>
@@ -45,7 +79,6 @@ function HomeLayout({children}){
         <div className="w-3/4 m-auto">
         <div>
         {children}
-
         </div>
         </div>
     </div>
