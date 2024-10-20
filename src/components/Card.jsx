@@ -9,7 +9,7 @@ export default function Card({
     dividerColor="bg-black" 
 }) {
     return (
-        <div className={`w-64 h-44 ${background} rounded-md flex flex-col items-center justify-center py-4 border-b-8 ${borderColor}`}>
+        <div className={`hover:scale-110 w-64 h-44 ${background} rounded-md flex flex-col items-center justify-center py-4 px-5 border-b-8 ${borderColor} m-3`}>
             <div className="text-black text-2xl">
                 {children} <span>{titleText}</span>
             </div>

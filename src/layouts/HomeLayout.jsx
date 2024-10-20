@@ -3,8 +3,8 @@ import { BiMenu } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import { logout } from "../Redux/Slices/AuthSlice";
-
+import { logoutAuth } from "../Redux/Slices/AuthSlice";
+import { logoutTicket } from "../Redux/Slices/TicketSlice"
 
 function HomeLayout({children}){
 
@@ -18,7 +18,8 @@ function HomeLayout({children}){
     });
 
     async function onLogout(){
-        dispatch(logout());
+        dispatch(logoutAuth());
+        dispatch(logoutTicket());
         navigator('/login');
 
     }
@@ -79,7 +80,7 @@ function HomeLayout({children}){
         <div className="w-3/4 m-auto">
         <div>
         {children}
-        </div>
+        </div> 
         </div>
     </div>
     );

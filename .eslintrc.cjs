@@ -19,7 +19,8 @@ module.exports = {
     ],
     "simple-import-sort/imports": "error",
     "semi":[1,"always"],
-    "react/prop-types":"off"
+    "react/prop-types":"off",
+    "rules": { "react/no-unescaped-entities": 0 }
   },
   
 }
