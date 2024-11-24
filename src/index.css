@@ -2,3 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .table-row{
+      @apply text-xl text-center font-bold flex-1 text-center overflow-x-scroll
+    }
+  }
+  

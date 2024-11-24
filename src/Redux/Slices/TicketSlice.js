@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 
 const initialState = {
     ticketList : [],
+    downloadedTicketList : [],
     ticketDistribution : {
         open:0,
         inProgress:0,
@@ -37,12 +38,19 @@ const ticketSlice = createSlice({
     reducers : {
         logoutTicket : (state)=>{
             state.ticketList = []
+            state.downloadedTicketList = []
+            state.ticketDistribution = initialState.ticketDistribution          
+        },
+        filterTickets : (state,action)=>{
+            console.log(action.payload)
+            state.ticketList = state.downloadedTicketList.filter((ticket)=>{return ticket.status == action.payload})
+
         }
     },
     extraReducers : (builder)=>{
         builder.addCase(getAllTicketsForTheUser.fulfilled,(state,action)=>{
             if(!action?.payload?.data)return;
-            state.ticketList = action?.payload?.data?.result;
+            state.downloadedTicketList = action?.payload?.data?.result;
             state.ticketDistribution = {
                 open:0,
                 inProgress:0,
@@ -50,11 +58,11 @@ const ticketSlice = createSlice({
                 onHold:0,
                 cancelled:0
             }
-            state.ticketList.forEach((ticket)=>{
+            state.downloadedTicketList.forEach((ticket)=>{
                 state.ticketDistribution[ticket.status]=state.ticketDistribution[ticket.status]+1
             })
         })
     }
 })
-export const {logoutTicket} = ticketSlice.actions;
+export const {logoutTicket,filterTickets} = ticketSlice.actions;
 export default ticketSlice.reducer;

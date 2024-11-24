@@ -57,8 +57,8 @@ function HomeLayout({children}){
                         // drawer.current.checked = false;
                     }}
                 >
-                    <li><a>View all tickets</a></li>
-                    <li><a>Dashboard</a></li>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/dashboard">Dashboard</Link></li>
                     <li className="absolute bottom-3 w-full ">
                         <div className="w-full flex gap-8">
                             {!auth.isLoggedIn ? (
