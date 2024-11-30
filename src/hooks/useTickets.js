@@ -21,7 +21,6 @@ export function useTickets() {
         if (authState.isLoggedIn) {
             loadTickets()
         }
-        console.log("here")
     }, [authState.token,searchParams.get('status')])
 
 

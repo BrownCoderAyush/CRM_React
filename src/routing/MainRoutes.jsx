@@ -1,16 +1,21 @@
-import { Route,Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
-function MainRoutes(){
-    return(
+import AuthRoutes from "./AuthRoutes";
+import ListAllUsers from "../pages/users/ListAllUsers";
+function MainRoutes() {
+    return (
         <Routes>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/signup" element={<Signup/>}/>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/dashboard" element={<Dashboard/>}/>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<Home />} />
+            <Route element={<AuthRoutes allowedRoles={["admin"]} />}>
+                <Route path="/users" element={<ListAllUsers/>} />
+            </Route>
+            <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
     );
 }

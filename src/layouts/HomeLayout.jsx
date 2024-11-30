@@ -13,10 +13,6 @@ function HomeLayout({children}){
     const dispatch = useDispatch();
     const navigator = useNavigate();
     
-    useEffect(()=>{
-        console.log(auth.isLoggedIn,"auth");
-    });
-
     async function onLogout(){
         dispatch(logoutAuth());
         dispatch(logoutTicket());

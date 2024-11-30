@@ -5,75 +5,13 @@ import HomeLayout from "../layouts/HomeLayout";
 import { TbProgressBolt } from "react-icons/tb";
 import { MdCancel, MdOutlineDoneAll, MdPending } from "react-icons/md";
 import { useTickets } from "../hooks/useTickets";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, CategoryScale, LinearScale, PointElement, LineElement } from "chart.js";
-import { Pie,Line } from 'react-chartjs-2';
-import { useEffect, useState } from "react";
-
-
-
-
-ChartJS.register(
-    ArcElement,
-    Tooltip,
-    Legend,
-    Title,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement
-);
+import { Pie,Line, Bar } from 'react-chartjs-2';
+import useCharts from "../hooks/useCharts";
 
 export default function Home() {
 
+    const [pieChartData,lineChartData,GroupedBarChartData] = useCharts()
     const [ticketState] = useTickets();
-    const [openTicketsData, setOpenTicketsData] = useState({});
-    const pieChartData = {
-        labels: Object.keys(ticketState.ticketDistribution),
-        datasets: [
-            {
-                label: "Issue type",
-                data: [
-                    (ticketState.ticketDistribution.open / ticketState.downloadedTicketList.length) * 100,
-                    (ticketState.ticketDistribution.inProgress / ticketState.downloadedTicketList.length) * 100,
-                    (ticketState.ticketDistribution.resolved / ticketState.downloadedTicketList.length) * 100,
-                    (ticketState.ticketDistribution.onHold / ticketState.downloadedTicketList.length) * 100,
-                    (ticketState.ticketDistribution.cancelled / ticketState.downloadedTicketList.length) * 100
-                ],
-                backgroundColor: ["yellow", "red", "blue", "purple", "white"],
-                fontColor: "white",
-                borderColor: "black"
-            }
-        ]
-    }
-
-    useEffect(()=>{
-        if(ticketState.downloadedTicketList.length){
-            let openTicketsData = {
-
-            }
-            ticketState.downloadedTicketList.forEach((ticket)=>{
-                if(ticket.status == 'open'){
-                    const date = ticket.createdAt.split("T")[0];
-                    openTicketsData[date]= !openTicketsData.hasOwnProperty(date) ? 1 : openTicketsData[date]+1
-                }
-            })
-            console.log(openTicketsData);
-            setOpenTicketsData(openTicketsData)
-        }
-    },[ticketState.downloadedTicketList])
-
-    const lineChartData = {
-        labels : Object.keys(openTicketsData),
-        datasets: [
-          {
-            label: 'Open Tickets Data',
-            data: Object.values(openTicketsData),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          }      
-        ]
-      };
-
     return (
         <HomeLayout>
             <div className="mt-10 flex gap-1 flex-wrap justify-center">
@@ -100,7 +38,7 @@ export default function Home() {
                     <TbProgressBolt className="inline " />
                 </Card>
                 <Card
-                    titleText="Resolved"
+                    titleText="resolved"
                     quantity={ticketState.ticketDistribution.resolved}
                     borderColor="border-purple-300"
                     fontColor="text-black"
@@ -110,7 +48,7 @@ export default function Home() {
                     <MdOutlineDoneAll className="inline " />
                 </Card>
                 <Card
-                    titleText="OnHold"
+                    titleText="onHold"
                     quantity={ticketState.ticketDistribution.onHold}
                     background="bg-gray-300"
                     borderColor="border-gray-800"
@@ -121,7 +59,7 @@ export default function Home() {
                     <MdPending className="inline " />
                 </Card>
                 <Card
-                    titleText="Cancelled"
+                    titleText="cancelled"
                     quantity={ticketState.ticketDistribution.cancelled}
                     background="bg-violet-300"
                     borderColor="border-green-300"
@@ -139,10 +77,15 @@ export default function Home() {
                     />
                 </div>
             </div>
-            <div>
-            <div className="mt-10 flex justify-center items-center">
-                <Line data={lineChartData} />
-                </div>
+            <div className="mt-10 mb-10 flex justify-center items-center">
+            <div className="w-[41rem] h-[20rem] bg-yellow-200">
+                <Line data={lineChartData}/>
+            </div>
+            </div>
+            <div className="mt-10 mb-10 flex justify-center items-center">
+            <div className="w-[41rem] h-[20rem] bg-yellow-200">
+                <Bar data={GroupedBarChartData}/>
+            </div>
             </div>
         </HomeLayout>
     );
