@@ -6,12 +6,14 @@ import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
 import AuthRoutes from "./AuthRoutes";
 import ListAllUsers from "../pages/users/ListAllUsers";
+import CreateTicket from "../pages/tickets/CreateTicket";
 function MainRoutes() {
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Home />} />
+            <Route path="/createTicket" element={<CreateTicket />} />
             <Route element={<AuthRoutes allowedRoles={["admin"]} />}>
                 <Route path="/users" element={<ListAllUsers/>} />
             </Route>

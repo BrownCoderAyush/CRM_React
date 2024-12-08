@@ -55,6 +55,7 @@ function HomeLayout({children}){
                 >
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/dashboard">Dashboard</Link></li>
+                    { auth.isLoggedIn  && <li><Link to="/createTicket">Create Ticket</Link></li> }
                     <li className="absolute bottom-3 w-full ">
                         <div className="w-full flex gap-8">
                             {!auth.isLoggedIn ? (

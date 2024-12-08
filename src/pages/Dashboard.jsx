@@ -4,57 +4,76 @@ import { useTickets } from "../hooks/useTickets";
 import HomeLayout from "../layouts/HomeLayout";
 import { usePDF } from "react-to-pdf";
 import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import DataTable from "react-data-table-component";
+import TicketDetailsModal from "../components/TicketDetailsModal";
 // https://react-data-table-component.netlify.app/?path=/story/getting-started-kitchen-sink--kitchen-sink
 
+
+const columns = [
+    {
+        name: 'Ticket Id',
+        selector: row => row._id,
+    },
+    {
+        name: 'Title',
+        selector: row => row.title,
+    },
+    {
+        name: 'Description',
+        selector: row => row.description,
+    },
+    {
+        name: 'Reporter',
+        selector: row => row.assignee,
+    },
+    {
+        name: 'Priority',
+        selector: row => row.ticketPriority,
+    },
+    {
+        name: 'Assignee',
+        selector: row => row.assignedTo,
+    },
+    {
+        name: 'Status',
+        selector: row => row.status,
+    }
+];
+
+
 function Dashboard() {
-    const [ticketState] = useTickets()
-    const { toPDF , targetRef } = usePDF({filename:'page.pdf'});
-    const [searchParams]=useSearchParams();
+    const [reload,setReload]=useState(false);
+    const [ticketState] = useTickets(reload)
+    const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
+    const [searchParams] = useSearchParams();
+    const ticketModalRef = useRef(null);
+    const [selectedTicket,setSelectedTicket]=useState({});
+   
     const tickets = ticketState 
-    ? (searchParams.get("status") ? ticketState.ticketList : ticketState.downloadedTicketList)
-    : [];
-        return (
+        ? (searchParams.get("status") ? ticketState.ticketList : ticketState.downloadedTicketList)
+        : [];
+    return (
         <HomeLayout>
             <div className="min-h-[90vh] flex flex-col items-center justify-center gap-2">
                 <div className="bg-yellow-500 w-full text-black text-center text-3xl py-4 font-bold hover:bg-yellow-300 ">
-                    Ticket Records  <AiOutlineDownload/>    
+                    Ticket Records  <AiOutlineDownload />
                 </div>
                 <div ref={targetRef}>
-                {/* TABLES  */}
-                <div className="flex flex-col w-full">
-                    {/* row  */}
-                    <div className="flex justify-between items-center bg-purple-700 px-1 py-2">
-                    <div className="table-row">Ticket Id</div>
-                    <div className="table-row">Title</div>
-                    <div className="table-row">Description</div>
-                    <div className="table-row">Reporter</div>
-                    <div className="table-row">Priority</div>
-                    <div className="table-row">Assignee</div>
-                    <div className="table-row">Status</div>
-                    </div>
+                    {/* TABLES  */}
+                    <DataTable
+                        onRowClicked={(row)=>{
+                            setSelectedTicket(row)
+                            ticketModalRef.current.showModal()
+                        }}
+                        columns={columns}
+                        data={tickets}
+                    />
                 </div>
-                {tickets.map((ticket=>{
-                    return (
-                <div className="flex flex-col w-full" key={ticket._id}>
-                    <div className="flex flex-col w-full">
-                        <div className="flex justify-between items-center bg-purple-700 px-1 py-2">
-                        <div className="table-row">{ticket._id}</div>
-                        <div className="table-row">{ticket.title}</div>
-                        <div className="table-row">{ticket.description}</div>
-                        <div className="table-row">{ticket.assignee}</div>
-                        <div className="table-row">{ticket.ticketPriority}</div>
-                        <div className="table-row">{ticket.assignedTo}</div>
-                        <div className="table-row">{ticket.status}</div>
-                        </div>
-                    </div>
-                </div>  
-                    )
-                }))}
-                </div>
+                <TicketDetailsModal ref={ticketModalRef} isReload = {setReload} ticket = {selectedTicket}/>
             </div>
         </HomeLayout>
-        
+
     )
 }
 
